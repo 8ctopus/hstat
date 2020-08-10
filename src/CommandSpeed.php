@@ -101,7 +101,7 @@ class CommandSpeed extends Command
 
         for ($i = 0; $i < $iterations; ++$i) {
             array_push($cells, [
-                $i,
+                $i + 1,
                 $stats['range_dns'][$i],
                 $stats['range_connect'][$i],
                 $stats['range_ssl'][$i],
@@ -115,11 +115,11 @@ class CommandSpeed extends Command
         // create table
         $this->io->table([
             'i',
-            'dns',
-            'connect',
-            'ssl',
-            'server',
-            'transfer',
+            'DNS lookup (ms)',
+            'TCP connection (ms)',
+            'TLS handshake (ms)',
+            'server processing (ms)',
+            'content transfer (ms)',
         ], $cells);
 
         return 0;
