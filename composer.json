@@ -1,0 +1,23 @@
+{
+    "name": "8ctopus/hstat",
+    "description": "test web page speed command line tool",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "8ctopus",
+            "email": "hello@octopuslabs.io"
+        }
+    ],
+    "require": {
+        "symfony/console": "^5.0",
+        "symfony/finder": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Oct8pus\\hstat\\": "src/"
+        }
+    },
+    "bin": [
+        "hstat"
+    ]
+}
