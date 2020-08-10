@@ -67,6 +67,10 @@ class CommandSpeed extends Command
         // get pause option
         $pause = $input->getOption('pause');
 
+        // convert pause to int
+        if ($pause !== false)
+            $pause = intval($pause);
+
         // loop iterations
         $stats = [];
 
@@ -89,7 +93,7 @@ class CommandSpeed extends Command
 
             // pause
             if ($pause)
-                sleep($pause);
+                usleep($pause * 1000);
         }
 
         // log success
