@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 /**
- * Compile webp8 into phar
+ * Compile hstat into phar
  * @note php.ini setting phar.readonly must be set to false
  * parts taken from composer compiler https://github.com/composer/composer/blob/master/src/Composer/Compiler.php
  */
@@ -50,8 +50,8 @@ $finder->files()
 foreach ($finder as $file)
     $phar->addFile($file->getRealPath(), getRelativeFilePath($file));
 
-// webp8 entry point
-$file = 'src/webp8.php';
+// entry point
+$file = 'src/hstat.php';
 
 // create default "boot" loader
 $boot_loader = $phar->createDefaultStub($file);
