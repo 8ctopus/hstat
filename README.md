@@ -40,6 +40,27 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
       10   144               92                    117                  80                       189
      ---- ----------------- --------------------- -------------------- ------------------------ -----------------------
 
-# build phar
+    $ ./hstat.phar speed --help
+    Description:
+      Measure web page speed
+
+    Usage:
+      speed [options] [--] <url>
+
+    Arguments:
+      url
+
+    Options:
+      -i, --iterations=ITERATIONS  number of iterations
+      -p, --pause=PAUSE            pause in ms between iterations
+      -h, --help                   Display this help message
+      -q, --quiet                  Do not output any message
+      -V, --version                Display this application version
+          --ansi                   Force ANSI output
+          --no-ansi                Disable ANSI output
+      -n, --no-interaction         Do not ask any interactive question
+      -v|vv|vvv, --verbose         Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+
+# how to build phar
 
     php src/Compiler.php
