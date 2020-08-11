@@ -144,9 +144,7 @@ class CommandSpeed extends Command
             ];
 
             // add separating line
-            array_push($cells,
-                $line,
-            );
+            array_push($cells, $line);
 
             // add stats to table
             if (isset($avg))
