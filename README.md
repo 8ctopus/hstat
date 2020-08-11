@@ -1,8 +1,8 @@
 hstat is a command line tool to test web pages performance.
 
-It was inspired from the works of @talhasch [php-httpstat](https://github.com/talhasch/php-httpstat) and @reorx [httpstat](https://github.com/reorx/httpstat)and adds a few improvements:
+It was inspired from the works of @talhasch [php-httpstat](https://github.com/talhasch/php-httpstat) and @reorx [httpstat](https://github.com/reorx/httpstat) and adds a few improvements:
 - standalone
-- iterations with pause between iterations
+- iterations with pause inbetween
 - data set analysis: average, median, max and min.
 
 # how to install
@@ -24,7 +24,7 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
 
 # how to use
 
-## measure website speed 10 iterations, 3 seconds pause inbetween, show average and max
+### measure website speed 10 iterations, 3 seconds pause inbetween, show average and max
     $ ./hstat.phar speed --iterations 10 --pause 3000 --average --max https://octopuslabs.io/
 
      ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
@@ -45,7 +45,7 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
       max   10                154                   187                  367                      2
      ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
 
-## hstat documentation
+### hstat documentation
     $ ./hstat.phar speed --help
     Description:
       Measure web page speed
