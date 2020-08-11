@@ -257,10 +257,12 @@ class CommandSpeed extends Command
             [
                 '--output',
                 tempnam(sys_get_temp_dir(), 'hstat')
-            ], [
+            ],
+            /*[
                 '--dump-header',
                 tempnam(sys_get_temp_dir(), 'hstat'),
-            ], [
+            ],*/
+            [
                 '--write-out',
                 self::build_writeout_argument(),
             ],
