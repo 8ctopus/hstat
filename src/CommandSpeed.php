@@ -262,7 +262,7 @@ class CommandSpeed extends Command
                 tempnam(sys_get_temp_dir(), 'hstat'),
             ], [
                 '--write-out',
-                self::build_curl_argument_w(),
+                self::build_writeout_argument(),
             ],
             '--',
             $url,
@@ -297,10 +297,10 @@ class CommandSpeed extends Command
     }
 
     /**
-     * Build curl argument -w
+     * Build curl write-out argument
      * @return string
      */
-    private static function build_curl_argument_w(): string
+    private static function build_writeout_argument(): string
     {
         $params = [
             'time_namelookup',
@@ -314,7 +314,12 @@ class CommandSpeed extends Command
 //            'speed_upload',
         ];
 
-        $quote       = '\"';
+        // get quote character based on os
+        if (self::is_windows())
+            $quote = '\"';
+        else
+            $quote = '\'';
+
         $curl_params = '';
 
         foreach ($params as $i => $param) {
