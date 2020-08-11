@@ -107,8 +107,8 @@ class CommandSpeed extends Command
         }
 
         // log success
-        $this->io->newLine(2);
-        $this->io->success('');
+        //$this->io->newLine(2);
+        //$this->io->success('');
 
         // create table cells
         $cells = [];
