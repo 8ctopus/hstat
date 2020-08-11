@@ -423,7 +423,9 @@ class CommandSpeed extends Command
             if ($count % 2)
                 $med[$i] = $column[$index];
             else
-                $med[$i] = ($column[$index -1] + $column[$index +1]) / 2;
+                $med[$i] = round(($column[$index -1] + $column[$index]) / 2, 0);
+
+            unset($column);
         }
 
         return $med;
