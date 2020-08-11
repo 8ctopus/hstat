@@ -320,7 +320,7 @@ class CommandSpeed extends Command
         if (self::is_windows())
             $quote = '\"';
         else
-            $quote = '\'';
+            $quote = '"';
 
         $curl_params = '';
 
