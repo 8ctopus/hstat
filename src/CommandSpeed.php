@@ -27,7 +27,11 @@ class CommandSpeed extends Command
             ->setDescription('Measure web page speed')
             ->addArgument('url', InputArgument::REQUIRED)
             ->addOption('iterations', 'i', InputOption::VALUE_REQUIRED, 'number of iterations')
-            ->addOption('pause', 'p', InputOption::VALUE_REQUIRED, 'pause in ms between iterations');
+            ->addOption('pause', 'p', InputOption::VALUE_REQUIRED, 'pause in ms between iterations')
+            ->addOption('average', 'a', InputOption::VALUE_NONE, 'show average')
+            ->addOption('median', 'm', InputOption::VALUE_NONE, 'show median')
+            ->addOption('min', '', InputOption::VALUE_NONE, 'show min')
+            ->addOption('max', '', InputOption::VALUE_NONE, 'show max');
     }
 
     /**
@@ -120,11 +124,47 @@ class CommandSpeed extends Command
             ]);
         }
 
-        // TODO create average
+        // calculate stats
+        if ($input->getOption('average'))
+            $avg = self::average($cells);
+
+        if ($input->getOption('median'))
+            $med = self::median($cells);
+
+        if ($input->getOption('min'))
+            $min = self::min($cells);
+
+        if ($input->getOption('max'))
+            $max = self::max($cells);
+
+        // add stats
+        if (isset($avg) || isset($med) || isset($min) || isset($max)) {
+            $line = [
+                '', '', '', '', '', '',
+            ];
+
+            // add separating line
+            array_push($cells,
+                $line,
+            );
+
+            // add stats to table
+            if (isset($avg))
+                array_push($cells, $avg);
+
+            if (isset($med))
+                array_push($cells, $med);
+
+            if (isset($min))
+                array_push($cells, $min);
+
+            if (isset($max))
+                array_push($cells, $max);
+        }
 
         // create table
         $this->io->table([
-            'i',
+            '/',
             'DNS lookup (ms)',
             'TCP connection (ms)',
             'TLS handshake (ms)',
@@ -239,8 +279,8 @@ class CommandSpeed extends Command
         // convert array arguments to string
         foreach ($arguments as $key => &$values) {
             if (is_array($values)) {
-                foreach ($values as $key2 => $value) {
-                    if ($key2 == 0)
+                foreach ($values as $key_column => $value) {
+                    if ($key_column == 0)
                         $output = $value;
                     else
                         $output .= $space_char . $quote_char . $value . $quote_char;
@@ -303,5 +343,153 @@ class CommandSpeed extends Command
     private static function is_windows(): bool
     {
         return strcasecmp(PHP_OS, 'WINNT') == 0;
+    }
+
+    /**
+     * Calculate average for each array column
+     * @param  array $cells
+     * @return array with averages
+     */
+    private static function average(array $cells)
+    {
+        $avg = [];
+
+        foreach ($cells as $key => $line) {
+            foreach ($line as $key_column => $value) {
+                // set name in iteration column
+                if ($key_column == 0) {
+                    $avg[0] = 'avg';
+                    continue;
+                }
+
+                // set first value
+                if ($key == 0) {
+                    $avg[$key_column] = $value;
+                    continue;
+                }
+
+                // add value
+                $avg[$key_column] += $value;
+            }
+        }
+
+        $count = sizeof($cells);
+
+        foreach ($avg as $key => &$value) {
+            // ignore iteration column
+            if ($key == 0)
+                continue;
+
+            // get column average
+            $avg[$key] = round($value / $count, 0);
+        }
+
+        return $avg;
+    }
+
+    /**
+     * Calculate median for each array column
+     * @param  array $cells
+     * @return array with averages
+     */
+    private static function median(array $cells)
+    {
+        $med = [];
+
+        $med[0] = 'med';
+
+        // get rows count
+        $rows = count($cells);
+
+        // get columns count
+        $columns = count($cells[0]);
+
+        // iterate through columns (skip first one)
+        for ($i = 1; $i < $columns; ++$i) {
+            // iterate through column rows
+            for ($j = 0; $j < $rows; ++$j) {
+                // get cell value
+                $column[] = $cells[$j][$i];
+            }
+
+            // sort column values ascending
+            sort($column, SORT_NUMERIC);
+
+            // count column values
+            $count = count($column);
+
+            $index = floor($count / 2);
+
+            if ($count % 2)
+                $med[$i] = $column[$index];
+            else
+                $med[$i] = ($column[$index -1] + $column[$index +1]) / 2;
+        }
+
+        return $med;
+    }
+
+    /**
+     * Calculate max for each array column
+     * @param  array $cells
+     * @return array with maxes
+     */
+    private static function max(array $cells)
+    {
+        $max = [];
+
+        foreach ($cells as $key => $line) {
+            foreach ($line as $key_column => $value) {
+                // set name in iteration column
+                if ($key_column == 0) {
+                    $max[0] = 'max';
+                    continue;
+                }
+
+                // set first value
+                if ($key == 0) {
+                    $max[$key_column] = $value;
+                    continue;
+                }
+
+                // update value only if greater
+                if ($value > $max[$key_column])
+                     $max[$key_column] = $value;
+            }
+        }
+
+        return $max;
+    }
+
+    /**
+     * Calculate min for each array column
+     * @param  array $cells
+     * @return array with mins
+     */
+    private static function min(array $cells)
+    {
+        $min = [];
+
+        foreach ($cells as $key => $line) {
+            foreach ($line as $key_column => $value) {
+                // set name in iteration column
+                if ($key_column == 0) {
+                    $min[0] = 'min';
+                    continue;
+                }
+
+                // set first value
+                if ($key == 0) {
+                    $min[$key_column] = $value;
+                    continue;
+                }
+
+                // update value only if smaller
+                if ($value < $min[$key_column])
+                     $min[$key_column] = $value;
+            }
+        }
+
+        return $min;
     }
 }
