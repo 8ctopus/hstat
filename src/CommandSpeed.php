@@ -228,9 +228,15 @@ class CommandSpeed extends Command
             $url,
         ];
 
-        $space_char = ' ';
-        $quote_char = '"';
+        // get quote character based on os
+        if (self::is_windows())
+            $quote_char = '"';
+        else
+            $quote_char = '\'';
 
+        $space_char = ' ';
+
+        // convert array arguments to string
         foreach ($arguments as $key => &$values) {
             if (is_array($values)) {
                 foreach ($values as $key2 => $value) {
@@ -244,7 +250,7 @@ class CommandSpeed extends Command
             }
         }
 
-        // implode arguments
+        // build command by imploding arguments
         $command .= $space_char . implode($space_char, $arguments);
 
         return $command;
@@ -284,9 +290,18 @@ class CommandSpeed extends Command
      * @param  string $cmd
      * @return bool true if installed, otherwise false
      */
-    public static function command_exists(string $cmd): bool
+    private static function command_exists(string $cmd): bool
     {
         $return = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
         return !empty($return);
+    }
+
+    /**
+     * Check if operating system is Windows
+     * @return bool
+     */
+    private static function is_windows(): bool
+    {
+        return strcasecmp(PHP_OS, 'WINNT') == 0;
     }
 }
