@@ -71,6 +71,12 @@ class CommandSpeed extends Command
         if ($pause !== false)
             $pause = intval($pause);
 
+        // build curl command
+        $command = self::build_command($url);
+
+        // log curl command
+        $this->io->writeln($command, OutputInterface::VERBOSITY_VERBOSE);
+
         // loop iterations
         $stats = [];
 
@@ -78,7 +84,7 @@ class CommandSpeed extends Command
             $stat = [];
 
             // measure speed
-            if (self::measure($url, $stat))
+            if (self::measure($command, $stat))
                 if (!$i) {
                     // create stats
                     foreach ($stat as $key => $value) {
@@ -131,25 +137,12 @@ class CommandSpeed extends Command
 
     /**
      * Measure speed
-     * @param  string $url
+     * @param string $command
      * @param [out] array $stats
      * @return bool true on success, otherwise false
      */
-    private function measure(string $url, array &$stats): bool
+    private function measure(string $command, array &$stats): bool
     {
-        // get curl parameters to track speed
-        $params = self::build_curl_argument_w();
-
-        // get temporary filenames
-        $file_headers = tempnam(sys_get_temp_dir(), 'hstat');
-        $file_body    = tempnam(sys_get_temp_dir(), 'hstat');
-
-        // curl command
-        $command = "curl -s -S -w {$params} -o {$file_body} -D {$file_headers} {$url}";
-
-        // log curl command
-        $this->io->writeln($command, OutputInterface::VERBOSITY_VERBOSE);
-
         // execute command - taken from httpstat
         $process = proc_open($command, [
                 0 => array("pipe", "r"),
@@ -205,6 +198,59 @@ class CommandSpeed extends Command
     }
 
     /**
+     * Build command
+     * @param  string $url
+     * @return string command
+     */
+    private static function build_command(string $url): string
+    {
+        $command = 'curl';
+
+        // -S, --show-error    Show error even when -s is used
+        // -s, --silent        Silent mode
+        // -o, --output <file> Write to file instead of stdout
+        // -w, --write-out <format> Use output FORMAT after completion
+        // -D, --dump-header <filename> Write the received headers to <filename>
+        $arguments = [
+            '--silent',
+            '--show-error',
+            [
+                '--output',
+                tempnam(sys_get_temp_dir(), 'hstat')
+            ], [
+                '--dump-header',
+                tempnam(sys_get_temp_dir(), 'hstat'),
+            ], [
+                '--write-out',
+                self::build_curl_argument_w(),
+            ],
+            '--',
+            $url,
+        ];
+
+        $space_char = ' ';
+        $quote_char = '"';
+
+        foreach ($arguments as $key => &$values) {
+            if (is_array($values)) {
+                foreach ($values as $key2 => $value) {
+                    if ($key2 == 0)
+                        $output = $value;
+                    else
+                        $output .= $space_char . $quote_char . $value . $quote_char;
+                }
+
+                $arguments[$key] = $output;
+            }
+        }
+
+        // implode arguments
+        $command .= $space_char . implode($space_char, $arguments);
+
+        return $command;
+    }
+
+    /**
      * Build curl argument -w
      * @return string
      */
@@ -230,7 +276,7 @@ class CommandSpeed extends Command
             $curl_params .= $quote . $param . $quote .": %{{$param}}";
         }
 
-        return '"{'. $curl_params .'}"';
+        return '{'. $curl_params .'}';
     }
 
     /**
