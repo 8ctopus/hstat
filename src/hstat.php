@@ -6,7 +6,7 @@ if (file_exists(__DIR__ .'/../vendor/autoload.php'))
 else
     require(__DIR__ .'/vendor/autoload.php');
 
-$app = new Symfony\Component\Console\Application('hstat', '0.0.2');
+$app = new Symfony\Component\Console\Application('hstat', '0.0.3');
 $app->add(new Oct8pus\hstat\CommandSpeed());
 
 $app->run();

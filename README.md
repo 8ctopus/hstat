@@ -7,7 +7,7 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
 
 # how to install
 
-    curl -L -o hstat.phar https://github.com/8ctopus/hstat/releases/download/v0.0.2/hstat.phar
+    curl -L -o hstat.phar https://github.com/8ctopus/hstat/releases/download/v0.0.3/hstat.phar
     
     # check hash against the one published under releases
     sha256sum hstat.phar
