@@ -7,7 +7,7 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
 
 # how to install
 
-    curl -L -o hstat.phar https://github.com/8ctopus/hstat/releases/download/v0.0.5/hstat.phar
+    curl -L -o hstat.phar https://github.com/8ctopus/hstat/releases/download/v0.0.6/hstat.phar
     
     # check hash against the one published under releases
     sha256sum hstat.phar
@@ -24,25 +24,26 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
 
 # how to use
 
-### measure website speed 10 iterations, 3 seconds pause inbetween, show average and max
-    $ ./hstat.phar speed --iterations 10 --pause 3000 --average --max https://octopuslabs.io/
-
+### measure website speed 10 iterations, 3 seconds pause inbetween, show median, average, min and max
+    $ ./hstat speed --iterations 10 --pause 3000 --median --average --min --max https://octopuslabs.io/
      ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
       /     DNS lookup (ms)   TCP connection (ms)   TLS handshake (ms)   server processing (ms)   content transfer (ms)
      ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
-      1     10                103                   187                  120                      1
-      2     9                 68                    86                   71                       1
-      3     9                 73                    90                   73                       1
-      4     10                78                    98                   81                       2
-      5     9                 75                    93                   76                       1
-      6     10                81                    91                   72                       2
-      7     9                 154                   159                  367                      1
-      8     10                69                    87                   70                       1
-      9     10                77                    93                   73                       2
-      10    10                71                    90                   72                       1
+      1     21                69                    96                   67                       1
+      2     14                74                    102                  73                       2
+      3     12                114                   93                   69                       0
+      4     21                68                    106                  68                       1
+      5     14                92                    97                   67                       1
+      6     28                72                    132                  364                      1
+      7     22                72                    99                   72                       1
+      8     14                86                    110                  69                       1
+      9     8                 102                   92                   74                       1
+      10    12                67                    87                   68                       1
 
-      avg   10                85                    107                  108                      1
-      max   10                154                   187                  367                      2
+      med   14                73                    98                   69                       1
+      avg   17                82                    101                  99                       1
+      min   8                 67                    87                   67                       0
+      max   28                114                   132                  364                      2
      ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
 
 ### hstat documentation
