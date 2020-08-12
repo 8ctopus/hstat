@@ -31,7 +31,8 @@ class CommandSpeed extends Command
             ->addOption('average', 'a', InputOption::VALUE_NONE, 'show average')
             ->addOption('median', 'm', InputOption::VALUE_NONE, 'show median')
             ->addOption('min', '', InputOption::VALUE_NONE, 'show min')
-            ->addOption('max', '', InputOption::VALUE_NONE, 'show max');
+            ->addOption('max', '', InputOption::VALUE_NONE, 'show max')
+            ->addOption('arguments', 'r', InputOption::VALUE_REQUIRED, 'arguments to pass to curl', '');
     }
 
     /**
@@ -75,8 +76,11 @@ class CommandSpeed extends Command
         if ($pause !== false)
             $pause = intval($pause);
 
+        // get arguments to pass to curl
+        $arguments = $input->getOption('arguments');
+
         // build curl command
-        $command = self::build_command($url);
+        $command = self::build_command($url, $arguments);
 
         // log curl command
         $this->io->writeln($command, OutputInterface::VERBOSITY_VERBOSE);
@@ -234,9 +238,10 @@ class CommandSpeed extends Command
     /**
      * Build command
      * @param  string $url
+     * @param  string $arguments arguments to pass to curl
      * @return string command
      */
-    private static function build_command(string $url): string
+    private static function build_command(string $url, string $arguments): string
     {
         $command = 'curl';
 
@@ -245,7 +250,7 @@ class CommandSpeed extends Command
         // -o, --output <file> Write to file instead of stdout
         // -w, --write-out <format> Use output FORMAT after completion
         // -D, --dump-header <filename> Write the received headers to <filename>
-        $arguments = [
+        $args = [
             '--silent',
             '--show-error',
             [
@@ -260,8 +265,6 @@ class CommandSpeed extends Command
                 '--write-out',
                 self::build_writeout_argument(),
             ],
-            '--',
-            $url,
         ];
 
         // get quote character based on os
@@ -273,7 +276,7 @@ class CommandSpeed extends Command
         $space_char = ' ';
 
         // convert array arguments to string
-        foreach ($arguments as $key => &$values) {
+        foreach ($args as $key => &$values) {
             if (is_array($values)) {
                 foreach ($values as $key_column => $value) {
                     if ($key_column == 0)
@@ -282,14 +285,18 @@ class CommandSpeed extends Command
                         $output .= $space_char . $quote_char . $value . $quote_char;
                 }
 
-                $arguments[$key] = $output;
+                $args[$key] = $output;
             }
         }
 
         // build command by imploding arguments
-        $command .= $space_char . implode($space_char, $arguments);
+        $command .= $space_char . implode($space_char, $args);
 
-        return $command;
+        // add user passed arguments
+        $command .= $space_char . $arguments;
+
+        // add url
+        return $command .' -- '. $url;
     }
 
     /**
