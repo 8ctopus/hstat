@@ -32,7 +32,8 @@ class CommandSpeed extends Command
             ->addOption('median', 'm', InputOption::VALUE_NONE, 'show median')
             ->addOption('min', '', InputOption::VALUE_NONE, 'show min')
             ->addOption('max', '', InputOption::VALUE_NONE, 'show max')
-            ->addOption('arguments', 'r', InputOption::VALUE_REQUIRED, 'arguments to pass to curl', '');
+            ->addOption('arguments', 'r', InputOption::VALUE_REQUIRED, 'arguments to pass to curl', '')
+            ->addOption('hide-iterations', '', InputOption::VALUE_NONE, 'hide iterations');
     }
 
     /**
@@ -137,7 +138,15 @@ class CommandSpeed extends Command
         if ($input->getOption('max'))
             $max = self::max($cells);
 
-        // add stats
+        if ($input->getOption('hide-iterations')) {
+            // hide iterations from results
+            $count = count($cells);
+
+            for ($i = 1; $i < $count; ++$i)
+                array_pop($cells);
+        }
+
+        // add stats to cells
         if (isset($avg) || isset($med) || isset($min) || isset($max)) {
             $line = [
                 '', '', '', '', '', '',
