@@ -126,11 +126,11 @@ class CommandSpeed extends Command
         }
 
         // calculate stats
-        if ($input->getOption('average'))
-            $avg = self::average($cells);
-
         if ($input->getOption('median'))
             $med = self::median($cells);
+
+        if ($input->getOption('average'))
+            $avg = self::average($cells);
 
         if ($input->getOption('min'))
             $min = self::min($cells);
@@ -147,7 +147,7 @@ class CommandSpeed extends Command
         }
 
         // add stats to cells
-        if (isset($avg) || isset($med) || isset($min) || isset($max)) {
+        if (isset($med) || isset($avg) || isset($min) || isset($max)) {
             $line = [
                 '', '', '', '', '', '',
             ];
@@ -156,11 +156,11 @@ class CommandSpeed extends Command
             array_push($cells, $line);
 
             // add stats to table
-            if (isset($avg))
-                array_push($cells, $avg);
-
             if (isset($med))
                 array_push($cells, $med);
+
+            if (isset($avg))
+                array_push($cells, $avg);
 
             if (isset($min))
                 array_push($cells, $min);
