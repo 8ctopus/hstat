@@ -138,14 +138,6 @@ class CommandSpeed extends Command
         if ($input->getOption('max'))
             $max = self::max($cells);
 
-        if ($input->getOption('hide-iterations')) {
-            // hide iterations from results
-            $count = count($cells);
-
-            for ($i = 1; $i < $count; ++$i)
-                array_pop($cells);
-        }
-
         // add stats to cells
         if (isset($med) || isset($avg) || isset($min) || isset($max)) {
             $line = [
@@ -154,6 +146,10 @@ class CommandSpeed extends Command
 
             // add separating line
             array_push($cells, $line);
+
+            if ($input->getOption('hide-iterations'))
+                // hide iterations from results
+                $cells = [];
 
             // add stats to table
             if (isset($med))
