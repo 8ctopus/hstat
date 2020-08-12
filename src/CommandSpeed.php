@@ -102,13 +102,9 @@ class CommandSpeed extends Command
                     }
 
             // pause
-            if ($pause)
+            if ($iterations > 1 && $pause)
                 usleep($pause * 1000);
         }
-
-        // log success
-        //$this->io->newLine(2);
-        //$this->io->success('');
 
         // create table cells
         $cells = [];
