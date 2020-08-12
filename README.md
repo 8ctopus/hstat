@@ -7,7 +7,7 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
 
 # how to install
 
-    curl -L -o hstat.phar https://github.com/8ctopus/hstat/releases/download/v0.0.4/hstat.phar
+    curl -L -o hstat.phar https://github.com/8ctopus/hstat/releases/download/v0.0.5/hstat.phar
     
     # check hash against the one published under releases
     sha256sum hstat.phar
@@ -46,7 +46,7 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
      ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
 
 ### hstat documentation
-    $ ./hstat.phar speed --help
+
     Description:
       Measure web page speed
 
@@ -63,6 +63,8 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
       -m, --median                 show median
           --min                    show min
           --max                    show max
+      -r, --arguments=ARGUMENTS    arguments to pass to curl [default: ""]
+          --hide-iterations        hide iterations
       -h, --help                   Display this help message
       -q, --quiet                  Do not output any message
       -V, --version                Display this application version
