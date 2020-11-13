@@ -8,7 +8,7 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
 # how to install
 
 ```bash
-curl -L -o hstat.phar https://github.com/8ctopus/hstat/releases/download/v0.0.6/hstat.phar
+curl -LO https://github.com/8ctopus/hstat/releases/download/v0.0.6/hstat.phar
 
 # check hash against the one published under releases
 sha256sum hstat.phar
@@ -21,7 +21,7 @@ mv hstat.phar hstat
 
 # move phar to /usr/local/bin/ (optional)
 mv hstat /usr/local/bin/
-```    
+```
 
 # how to use
 
@@ -47,6 +47,12 @@ mv hstat /usr/local/bin/
   min   8                 67                    87                   67                       0
   max   28                114                   132                  364                      2
  ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
+```
+
+### Xdebug cookie example
+
+```bash
+./hstat speed --iterations 10 --median --average --min --max --arguments="--cookie \"XDEBUG_SESSION=mysession\"" https://octopuslabs.io/
 ```
 
 ### hstat documentation
