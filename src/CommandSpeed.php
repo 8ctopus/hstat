@@ -122,6 +122,7 @@ class CommandSpeed extends Command
                 $stats['range_ssl'][$i],
                 $stats['range_server'][$i],
                 $stats['range_transfer'][$i],
+                $stats['time_total'][$i],
             ]);
         }
 
@@ -173,6 +174,7 @@ class CommandSpeed extends Command
             'TLS handshake (ms)',
             'server processing (ms)',
             'content transfer (ms)',
+            'total (ms)',
         ], $cells);
 
         return 0;
