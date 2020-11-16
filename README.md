@@ -49,6 +49,14 @@ mv hstat /usr/local/bin/
  ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
 ```
 
+### definitions
+
+- DNS lookup : time to lookup the server's IP address
+- TCP connection : time to establish the connection with the server
+- TLS handshake : time to establish a secured connection between you and the server (for https only)
+- server processing : time the server took to process the request (apache/nginx + php)
+- content transfer : time to transfer the page to you
+
 ### Xdebug cookie example
 
 ```bash
