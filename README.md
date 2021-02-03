@@ -108,3 +108,7 @@ Options:
 - parallel curl requests
 - make comparisons possible
 - fix json_decode locale issue with curl command - https://github.com/curl/curl/issues/1037
+- remove TLS column when http request
+- support for concomitant requests
+- more stats
+- add test progress indicator
