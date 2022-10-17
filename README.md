@@ -1,13 +1,16 @@
-hstat is a command line tool to test web pages performance.
+# hstat
+
+hstat is a command line tool to test the performance of webpages.
 
 It was inspired from the works of @talhasch [php-httpstat](https://github.com/talhasch/php-httpstat) and @reorx [httpstat](https://github.com/reorx/httpstat) and adds a few improvements:
+
 - standalone
 - iterations with pause in between
 - data set analysis: average, median, max and min.
 
 # how to install
 
-```bash
+```sh
 curl -LO https://github.com/8ctopus/hstat/releases/download/v1.0.2/hstat.phar
 
 # check hash against the one published under releases
@@ -95,8 +98,8 @@ Options:
 
 # how to build phar
 
-```bash
-    php src/Compiler.php
+```sh
+php src/Compiler.php
 ```
 
 # improvement ideas
