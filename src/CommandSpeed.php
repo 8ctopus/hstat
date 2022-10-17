@@ -48,7 +48,7 @@ class CommandSpeed extends Command
         $this->io = new SymfonyStyle($input, $output);
 
         // check that curl is installed
-        if (self::command_exists('curl'))
+        if (self::commandExists('curl'))
             $this->io->writeln('curl command found', OutputInterface::VERBOSITY_VERBOSE);
         else {
             $this->io->error([
@@ -81,7 +81,7 @@ class CommandSpeed extends Command
         $arguments = $input->getOption('arguments');
 
         // build curl command
-        $command = self::build_command($url, $arguments);
+        $command = self::buildCommand($url, $arguments);
 
         // log curl command
         $this->io->writeln($command, OutputInterface::VERBOSITY_VERBOSE);
@@ -248,7 +248,7 @@ class CommandSpeed extends Command
      * @param  string $arguments arguments to pass to curl
      * @return string command
      */
-    private static function build_command(string $url, string $arguments): string
+    private static function buildCommand(string $url, string $arguments): string
     {
         $command = 'curl';
 
@@ -270,26 +270,27 @@ class CommandSpeed extends Command
             ],*/
             [
                 '--write-out',
-                self::build_writeout_argument(),
+                self::buildWriteoutArgument(),
             ],
         ];
 
         // get quote character based on os
-        if (self::is_windows())
-            $quote_char = '"';
+        if (self::isWindows())
+            $quoteChar = '"';
         else
-            $quote_char = '\'';
+            $quoteChar = '\'';
 
-        $space_char = ' ';
+        $spaceChar = ' ';
 
         // convert array arguments to string
         foreach ($args as $key => &$values) {
             if (is_array($values)) {
                 foreach ($values as $key_column => $value) {
-                    if ($key_column == 0)
+                    if ($key_column == 0) {
                         $output = $value;
-                    else
-                        $output .= $space_char . $quote_char . $value . $quote_char;
+                    } else {
+                        $output .= $spaceChar . $quoteChar . $value . $quoteChar;
+                    }
                 }
 
                 $args[$key] = $output;
@@ -297,10 +298,10 @@ class CommandSpeed extends Command
         }
 
         // build command by imploding arguments
-        $command .= $space_char . implode($space_char, $args);
+        $command .= $spaceChar . implode($spaceChar, $args);
 
         // add user passed arguments
-        $command .= $space_char . $arguments;
+        $command .= $spaceChar . $arguments;
 
         // add url
         return $command .' -- '. $url;
@@ -310,7 +311,7 @@ class CommandSpeed extends Command
      * Build curl write-out argument
      * @return string
      */
-    private static function build_writeout_argument(): string
+    private static function buildWriteoutArgument(): string
     {
         $params = [
             'time_namelookup',
@@ -325,7 +326,7 @@ class CommandSpeed extends Command
         ];
 
         // get quote character based on os
-        if (self::is_windows())
+        if (self::isWindows())
             $quote = '\"';
         else
             $quote = '"';
@@ -345,7 +346,7 @@ class CommandSpeed extends Command
      * @param  string $cmd
      * @return bool true if installed, otherwise false
      */
-    private static function command_exists(string $cmd): bool
+    private static function commandExists(string $cmd): bool
     {
         $return = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
         return !empty($return);
@@ -355,7 +356,7 @@ class CommandSpeed extends Command
      * Check if operating system is Windows
      * @return bool
      */
-    private static function is_windows(): bool
+    private static function isWindows(): bool
     {
         return strcasecmp(PHP_OS, 'WINNT') == 0;
     }
