@@ -190,9 +190,9 @@ class CommandSpeed extends Command
     {
         // execute command - taken from httpstat
         $process = proc_open($command, [
-                0 => array("pipe", "r"),
-                1 => array("pipe", "w"),
-                2 => array("pipe", "w"),
+                0 => ["pipe", "r"],
+                1 => ["pipe", "w"],
+                2 => ["pipe", "w"],
             ],
             $pipes,
             sys_get_temp_dir(),
