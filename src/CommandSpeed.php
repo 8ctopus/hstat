@@ -77,7 +77,7 @@ class CommandSpeed extends Command
 
         // convert pause to int
         if ($pause !== false) {
-            $pause = intval($pause);
+            $pause = (int) $pause;
         }
 
         // get arguments to pass to curl
@@ -105,7 +105,7 @@ class CommandSpeed extends Command
                 } else {
                     // add stats to existing stats
                     foreach ($stat as $key => $value) {
-                        array_push($stats[$key], $value);
+                        $stats[$key][] = $value;
                     }
                 }
             }
@@ -120,7 +120,7 @@ class CommandSpeed extends Command
         $cells = [];
 
         for ($i = 0; $i < $iterations; ++$i) {
-            array_push($cells, [
+            $cells[] = [
                 $i + 1,
                 $stats['range_dns'][$i],
                 $stats['range_connect'][$i],
@@ -128,7 +128,7 @@ class CommandSpeed extends Command
                 $stats['range_server'][$i],
                 $stats['range_transfer'][$i],
                 $stats['time_total'][$i],
-            ]);
+            ];
         }
 
         // calculate stats
@@ -155,7 +155,7 @@ class CommandSpeed extends Command
             ];
 
             // add separating line
-            array_push($cells, $line);
+            $cells[] = $line;
 
             if ($input->getOption('hide-iterations')) {
                 // hide iterations from results
@@ -164,19 +164,19 @@ class CommandSpeed extends Command
 
             // add stats to table
             if (isset($med)) {
-                array_push($cells, $med);
+                $cells[] = $med;
             }
 
             if (isset($avg)) {
-                array_push($cells, $avg);
+                $cells[] = $avg;
             }
 
             if (isset($min)) {
-                array_push($cells, $min);
+                $cells[] = $min;
             }
 
             if (isset($max)) {
-                array_push($cells, $max);
+                $cells[] = $max;
             }
         }
 
@@ -228,7 +228,7 @@ class CommandSpeed extends Command
         $status = proc_get_status($process);
         $exit = $status['exitcode'];
 
-        if ($exit != 0 && $exit != -1) {
+        if ($exit !== 0 && $exit !== -1) {
             $this->io->writeln(sprintf('curl error: %s', $std_err), OutputInterface::VERBOSITY_NORMAL);
             return false;
         }
@@ -308,7 +308,7 @@ class CommandSpeed extends Command
         foreach ($args as $key => &$values) {
             if (is_array($values)) {
                 foreach ($values as $key_column => $value) {
-                    if ($key_column == 0) {
+                    if ($key_column === 0) {
                         $output = $value;
                     } else {
                         $output .= $spaceChar . $quoteChar . $value . $quoteChar;
@@ -385,7 +385,7 @@ class CommandSpeed extends Command
      */
     private static function isWindows() : bool
     {
-        return strcasecmp(PHP_OS, 'WINNT') == 0;
+        return strcasecmp(PHP_OS, 'WINNT') === 0;
     }
 
     /**
@@ -395,20 +395,20 @@ class CommandSpeed extends Command
      *
      * @return array with averages
      */
-    private static function average(array $cells)
+    private static function average(array $cells) : array
     {
         $avg = [];
 
         foreach ($cells as $key => $line) {
             foreach ($line as $key_column => $value) {
                 // set name in iteration column
-                if ($key_column == 0) {
+                if ($key_column === 0) {
                     $avg[0] = 'avg';
                     continue;
                 }
 
                 // set first value
-                if ($key == 0) {
+                if ($key === 0) {
                     $avg[$key_column] = $value;
                     continue;
                 }
@@ -418,11 +418,11 @@ class CommandSpeed extends Command
             }
         }
 
-        $count = sizeof($cells);
+        $count = count($cells);
 
         foreach ($avg as $key => &$value) {
             // ignore iteration column
-            if ($key == 0) {
+            if ($key === 0) {
                 continue;
             }
 
@@ -440,7 +440,7 @@ class CommandSpeed extends Command
      *
      * @return array with averages
      */
-    private static function median(array $cells)
+    private static function median(array $cells) : array
     {
         $med = [];
 
@@ -487,20 +487,20 @@ class CommandSpeed extends Command
      *
      * @return array with maxes
      */
-    private static function max(array $cells)
+    private static function max(array $cells) : array
     {
         $max = [];
 
         foreach ($cells as $key => $line) {
             foreach ($line as $key_column => $value) {
                 // set name in iteration column
-                if ($key_column == 0) {
+                if ($key_column === 0) {
                     $max[0] = 'max';
                     continue;
                 }
 
                 // set first value
-                if ($key == 0) {
+                if ($key === 0) {
                     $max[$key_column] = $value;
                     continue;
                 }
@@ -522,20 +522,20 @@ class CommandSpeed extends Command
      *
      * @return array with mins
      */
-    private static function min(array $cells)
+    private static function min(array $cells) : array
     {
         $min = [];
 
         foreach ($cells as $key => $line) {
             foreach ($line as $key_column => $value) {
                 // set name in iteration column
-                if ($key_column == 0) {
+                if ($key_column === 0) {
                     $min[0] = 'min';
                     continue;
                 }
 
                 // set first value
-                if ($key == 0) {
+                if ($key === 0) {
                     $min[$key_column] = $value;
                     continue;
                 }
