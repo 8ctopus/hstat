@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Oct8pus\hstat;
+
 use Oct8pus\hstat\CommandSpeed;
 use Symfony\Component\Console\Application;
 
