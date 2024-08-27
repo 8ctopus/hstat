@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Oct8pus\hstat;
 
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -215,6 +216,10 @@ class CommandSpeed extends Command
                 //'bypass_shell' => true,
             ]
         );
+
+        if (!$process) {
+            throw new Exception('open process');
+        }
 
         // get curl stdout and stderr
         $stdout = stream_get_contents($pipes[1]);
