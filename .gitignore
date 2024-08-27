@@ -1,6 +1,8 @@
+# composer
+/composer.lock
 /vendor/
 
+# other
 /*.sublime-workspace
-
 /hstat.phar
 /hstat
