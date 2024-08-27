@@ -31,9 +31,24 @@ mv hstat /usr/local/bin/
 
 # how to use
 
-### measure website speed 10 iterations, 3 seconds pause inbetween, show median, average, min and max
-```bash
- ./hstat speed --iterations 10 --pause 3000 --median --average --min --max https://octopuslabs.io/
+## basic
+
+```txt
+$ ./hstat speed https://octopuslabs.io/
+
+ --- ----------------- --------------------- -------------------- ------------------------ ----------------------- ------------
+  /   DNS lookup (ms)   TCP connection (ms)   TLS handshake (ms)   server processing (ms)   content transfer (ms)   total (ms)
+ --- ----------------- --------------------- -------------------- ------------------------ ----------------------- ------------
+  1   16                237                   767                  156                      0                       1176
+ --- ----------------- --------------------- -------------------- ------------------------ ----------------------- ------------
+```
+
+## advanced
+
+measure website speed 10 iterations, 3 seconds pause in between, show median, average, min and max
+
+```txt
+$ ./hstat speed --iterations 10 --pause 3000 --median --average --min --max https://octopuslabs.io/
  ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
   /     DNS lookup (ms)   TCP connection (ms)   TLS handshake (ms)   server processing (ms)   content transfer (ms)
  ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
