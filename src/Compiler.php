@@ -57,7 +57,7 @@ foreach ($finder as $file) {
 }
 
 // entry point
-$file = 'src/hstat.php';
+$file = 'src/EntryPoint.php';
 
 // create default "boot" loader
 $boot_loader = $phar->createDefaultStub($file);
