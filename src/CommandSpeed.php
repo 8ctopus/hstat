@@ -13,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CommandSpeed extends Command
 {
-    private $io;
+    private SymfonyStyle $style;
 
     /**
      * Configure command options
@@ -46,13 +46,13 @@ class CommandSpeed extends Command
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         // beautify input, output interface
-        $this->io = new SymfonyStyle($input, $output);
+        $this->style = new SymfonyStyle($input, $output);
 
         // check that curl is installed
         if (self::commandExists('curl')) {
-            $this->io->writeln('curl command found', OutputInterface::VERBOSITY_VERBOSE);
+            $this->style->writeln('curl command found', OutputInterface::VERBOSITY_VERBOSE);
         } else {
-            $this->io->error([
+            $this->style->error([
                 'curl command is missing',
                 'ubuntu: apt install curl',
                 'alpine: apk add curl',
@@ -87,7 +87,7 @@ class CommandSpeed extends Command
         $command = self::buildCommand($url, $arguments);
 
         // log curl command
-        $this->io->writeln($command, OutputInterface::VERBOSITY_VERBOSE);
+        $this->style->writeln($command, OutputInterface::VERBOSITY_VERBOSE);
 
         // loop iterations
         $stats = [];
@@ -181,7 +181,7 @@ class CommandSpeed extends Command
         }
 
         // create table
-        $this->io->table([
+        $this->style->table([
             '/',
             'DNS lookup (ms)',
             'TCP connection (ms)',
@@ -221,28 +221,28 @@ class CommandSpeed extends Command
         );
 
         // get curl stdout and stderr
-        $std_out = stream_get_contents($pipes[1]);
-        $std_err = stream_get_contents($pipes[2]);
+        $stdout = stream_get_contents($pipes[1]);
+        $stderr = stream_get_contents($pipes[2]);
 
         // get curl process status
         $status = proc_get_status($process);
         $exit = $status['exitcode'];
 
         if ($exit !== 0 && $exit !== -1) {
-            $this->io->writeln(sprintf('curl error: %s', $std_err), OutputInterface::VERBOSITY_NORMAL);
+            $this->style->writeln(sprintf('curl error: %s', $stderr), OutputInterface::VERBOSITY_NORMAL);
             return false;
         }
 
         // show stderr to user
-        $this->io->writeln($std_err, OutputInterface::VERBOSITY_VERBOSE);
+        $this->style->writeln($stderr, OutputInterface::VERBOSITY_VERBOSE);
 
         // decode curl json stats
-        $stats = json_decode($std_out, true);
+        $stats = json_decode($stdout, true);
 
         // check for decode errors
         if ($stats === null) {
-            $this->io->writeln(sprintf('json decode error: %s', json_last_error_msg()), OutputInterface::VERBOSITY_NORMAL);
-            $this->io->writeln(sprintf('curl result: %d %s %s', $exit, $std_out, $std_err), OutputInterface::VERBOSITY_VERBOSE);
+            $this->style->writeln(sprintf('json decode error: %s', json_last_error_msg()), OutputInterface::VERBOSITY_NORMAL);
+            $this->style->writeln(sprintf('curl result: %d %s %s', $exit, $stdout, $stderr), OutputInterface::VERBOSITY_VERBOSE);
             return false;
         }
 
@@ -307,8 +307,8 @@ class CommandSpeed extends Command
         // convert array arguments to string
         foreach ($args as $key => &$values) {
             if (is_array($values)) {
-                foreach ($values as $key_column => $value) {
-                    if ($key_column === 0) {
+                foreach ($values as $keyColumn => $value) {
+                    if ($keyColumn === 0) {
                         $output = $value;
                     } else {
                         $output .= $spaceChar . $quoteChar . $value . $quoteChar;
@@ -355,14 +355,14 @@ class CommandSpeed extends Command
             $quote = '"';
         }
 
-        $curl_params = '';
+        $curlParams = '';
 
         foreach ($params as $i => $param) {
-            $curl_params .= $i ? ',' : '';
-            $curl_params .= $quote . $param . $quote . ": %{{$param}}";
+            $curlParams .= $i ? ',' : '';
+            $curlParams .= $quote . $param . $quote . ": %{{$param}}";
         }
 
-        return '{' . $curl_params . '}';
+        return '{' . $curlParams . '}';
     }
 
     /**
@@ -400,21 +400,21 @@ class CommandSpeed extends Command
         $avg = [];
 
         foreach ($cells as $key => $line) {
-            foreach ($line as $key_column => $value) {
+            foreach ($line as $keyColumn => $value) {
                 // set name in iteration column
-                if ($key_column === 0) {
+                if ($keyColumn === 0) {
                     $avg[0] = 'avg';
                     continue;
                 }
 
                 // set first value
                 if ($key === 0) {
-                    $avg[$key_column] = $value;
+                    $avg[$keyColumn] = $value;
                     continue;
                 }
 
                 // add value
-                $avg[$key_column] += $value;
+                $avg[$keyColumn] += $value;
             }
         }
 
@@ -454,6 +454,8 @@ class CommandSpeed extends Command
 
         // iterate through columns (skip first one)
         for ($i = 1; $i < $columns; ++$i) {
+            $column = [];
+
             // iterate through column rows
             for ($j = 0; $j < $rows; ++$j) {
                 // get cell value
@@ -473,8 +475,6 @@ class CommandSpeed extends Command
             } else {
                 $med[$i] = round(($column[$index - 1] + $column[$index]) / 2, 0);
             }
-
-            unset($column);
         }
 
         return $med;
@@ -492,22 +492,22 @@ class CommandSpeed extends Command
         $max = [];
 
         foreach ($cells as $key => $line) {
-            foreach ($line as $key_column => $value) {
+            foreach ($line as $keyColumn => $value) {
                 // set name in iteration column
-                if ($key_column === 0) {
+                if ($keyColumn === 0) {
                     $max[0] = 'max';
                     continue;
                 }
 
                 // set first value
                 if ($key === 0) {
-                    $max[$key_column] = $value;
+                    $max[$keyColumn] = $value;
                     continue;
                 }
 
                 // update value only if greater
-                if ($value > $max[$key_column]) {
-                    $max[$key_column] = $value;
+                if ($value > $max[$keyColumn]) {
+                    $max[$keyColumn] = $value;
                 }
             }
         }
@@ -527,22 +527,22 @@ class CommandSpeed extends Command
         $min = [];
 
         foreach ($cells as $key => $line) {
-            foreach ($line as $key_column => $value) {
+            foreach ($line as $keyColumn => $value) {
                 // set name in iteration column
-                if ($key_column === 0) {
+                if ($keyColumn === 0) {
                     $min[0] = 'min';
                     continue;
                 }
 
                 // set first value
                 if ($key === 0) {
-                    $min[$key_column] = $value;
+                    $min[$keyColumn] = $value;
                     continue;
                 }
 
                 // update value only if smaller
-                if ($value < $min[$key_column]) {
-                    $min[$key_column] = $value;
+                if ($value < $min[$keyColumn]) {
+                    $min[$keyColumn] = $value;
                 }
             }
         }
