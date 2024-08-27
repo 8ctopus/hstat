@@ -4,5 +4,6 @@
 
 # other
 /*.sublime-workspace
+/.php-cs-fixer.cache
 /hstat.phar
 /hstat
