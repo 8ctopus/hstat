@@ -80,6 +80,10 @@ class CommandSpeed extends Command
         // get arguments to pass to curl
         $arguments = $input->getOption('arguments');
 
+        if (!is_string($url) || !is_string($arguments)) {
+            throw new Exception('invalid url or arguments');
+        }
+
         // build curl command
         $command = self::buildCommand($url, $arguments);
 
@@ -247,6 +251,10 @@ class CommandSpeed extends Command
             return false;
         }
 
+        if (!is_array($stats)) {
+            throw new Exception('decode json');
+        }
+
         // convert timing into ms
         foreach ($stats as $key => $value) {
             $stats[$key] = round($value * 1000, 0);
@@ -394,9 +402,9 @@ class CommandSpeed extends Command
     /**
      * Calculate average for each array column
      *
-     * @param array<int, array<int, mixed>> $cells
+     * @param array<int, array<int, int>> $cells
      *
-     * @return array<int, int>
+     * @return array<int, int|string>
      */
     private static function average(array $cells) : array
     {
@@ -439,9 +447,9 @@ class CommandSpeed extends Command
     /**
      * Calculate median for each array column
      *
-     * @param array<int, array<int, mixed>> $cells
+     * @param array<int, array<int, int>> $cells
      *
-     * @return array<int, int>
+     * @return array<int, int|string>
      */
     private static function median(array $cells) : array
     {
@@ -476,7 +484,7 @@ class CommandSpeed extends Command
             if ($count % 2) {
                 $med[$i] = $column[$index];
             } else {
-                $med[$i] = round(($column[$index - 1] + $column[$index]) / 2, 0);
+                $med[$i] = (int) round(($column[$index - 1] + $column[$index]) / 2, 0);
             }
         }
 
@@ -486,9 +494,9 @@ class CommandSpeed extends Command
     /**
      * Calculate max for each array column
      *
-     * @param array<int, array<int, mixed>> $cells
+     * @param array<int, array<int, int>> $cells
      *
-     * @return array<int, int>
+     * @return array<int, int|string>
      */
     private static function max(array $cells) : array
     {
@@ -521,9 +529,9 @@ class CommandSpeed extends Command
     /**
      * Calculate min for each array column
      *
-     * @param array<int, array<int, mixed>> $cells
+     * @param array<int, array<int, int>> $cells
      *
-     * @return array<int, int>
+     * @return array<int, int|string>
      */
     private static function min(array $cells) : array
     {
