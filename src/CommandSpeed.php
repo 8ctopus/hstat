@@ -1,8 +1,6 @@
-<?php declare(strict_types=1);
+<?php
 
-/**
- * @author 8ctopus <hello@octopuslabs.io>
- */
+declare(strict_types=1);
 
 namespace Oct8pus\hstat;
 

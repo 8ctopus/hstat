@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * Compile hstat into phar
  * @note php.ini setting phar.readonly must be set to false
  * parts taken from composer compiler https://github.com/composer/composer/blob/master/src/Composer/Compiler.php
  */
+
+declare(strict_types=1);
 
 use Symfony\Component\Finder\Finder;
 
