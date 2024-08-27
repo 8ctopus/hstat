@@ -6,8 +6,8 @@ namespace Oct8pus\hstat;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -17,9 +17,10 @@ class CommandSpeed extends Command
 
     /**
      * Configure command options
+     *
      * @return void
      */
-    protected function configure(): void
+    protected function configure() : void
     {
         $this->setName('speed')
             ->setDescription('Measure web page speed')
@@ -36,23 +37,25 @@ class CommandSpeed extends Command
 
     /**
      * Execute command
-     * @param  InputInterface $input
-     * @param  OutputInterface $output
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
      * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         // beautify input, output interface
         $this->io = new SymfonyStyle($input, $output);
 
         // check that curl is installed
-        if (self::commandExists('curl'))
+        if (self::commandExists('curl')) {
             $this->io->writeln('curl command found', OutputInterface::VERBOSITY_VERBOSE);
-        else {
+        } else {
             $this->io->error([
                 'curl command is missing',
                 'ubuntu: apt install curl',
-                'alpine: apk add curl'
+                'alpine: apk add curl',
             ]);
 
             return 127;
@@ -65,15 +68,17 @@ class CommandSpeed extends Command
         $iterations = $input->getOption('iterations');
 
         // minimum one iteration
-        if (!$iterations)
+        if (!$iterations) {
             $iterations = 1;
+        }
 
         // get pause option
         $pause = $input->getOption('pause');
 
         // convert pause to int
-        if ($pause !== false)
+        if ($pause !== false) {
             $pause = intval($pause);
+        }
 
         // get arguments to pass to curl
         $arguments = $input->getOption('arguments');
@@ -91,22 +96,24 @@ class CommandSpeed extends Command
             $stat = [];
 
             // measure speed
-            if (self::measure($command, $stat))
+            if (self::measure($command, $stat)) {
                 if (!$i) {
                     // create stats
                     foreach ($stat as $key => $value) {
                         $stats[$key] = [$value];
                     }
-                }
-                else
+                } else {
                     // add stats to existing stats
                     foreach ($stat as $key => $value) {
                         array_push($stats[$key], $value);
                     }
+                }
+            }
 
             // pause
-            if ($iterations > 1 && $pause)
+            if ($iterations > 1 && $pause) {
                 usleep($pause * 1000);
+            }
         }
 
         // create table cells
@@ -125,17 +132,21 @@ class CommandSpeed extends Command
         }
 
         // calculate stats
-        if ($input->getOption('median'))
+        if ($input->getOption('median')) {
             $med = self::median($cells);
+        }
 
-        if ($input->getOption('average'))
+        if ($input->getOption('average')) {
             $avg = self::average($cells);
+        }
 
-        if ($input->getOption('min'))
+        if ($input->getOption('min')) {
             $min = self::min($cells);
+        }
 
-        if ($input->getOption('max'))
+        if ($input->getOption('max')) {
             $max = self::max($cells);
+        }
 
         // add stats to cells
         if (isset($med) || isset($avg) || isset($min) || isset($max)) {
@@ -146,22 +157,27 @@ class CommandSpeed extends Command
             // add separating line
             array_push($cells, $line);
 
-            if ($input->getOption('hide-iterations'))
+            if ($input->getOption('hide-iterations')) {
                 // hide iterations from results
                 $cells = [];
+            }
 
             // add stats to table
-            if (isset($med))
+            if (isset($med)) {
                 array_push($cells, $med);
+            }
 
-            if (isset($avg))
+            if (isset($avg)) {
                 array_push($cells, $avg);
+            }
 
-            if (isset($min))
+            if (isset($min)) {
                 array_push($cells, $min);
+            }
 
-            if (isset($max))
+            if (isset($max)) {
                 array_push($cells, $max);
+            }
         }
 
         // create table
@@ -180,24 +196,29 @@ class CommandSpeed extends Command
 
     /**
      * Measure speed
+     *
      * @param string $command
      * @param [out] array $stats
+     *
      * @return bool true on success, otherwise false
      */
-    private function measure(string $command, array &$stats): bool
+    private function measure(string $command, array &$stats) : bool
     {
         // execute command - taken from httpstat
-        $process = proc_open($command, [
-                0 => ["pipe", "r"],
-                1 => ["pipe", "w"],
-                2 => ["pipe", "w"],
+        $process = proc_open(
+            $command,
+            [
+                0 => ['pipe', 'r'],
+                1 => ['pipe', 'w'],
+                2 => ['pipe', 'w'],
             ],
             $pipes,
             sys_get_temp_dir(),
             null,
             [
                 //'bypass_shell' => true,
-        ]);
+            ]
+        );
 
         // get curl stdout and stderr
         $std_out = stream_get_contents($pipes[1]);
@@ -205,7 +226,7 @@ class CommandSpeed extends Command
 
         // get curl process status
         $status = proc_get_status($process);
-        $exit   = $status['exitcode'];
+        $exit = $status['exitcode'];
 
         if ($exit != 0 && $exit != -1) {
             $this->io->writeln(sprintf('curl error: %s', $std_err), OutputInterface::VERBOSITY_NORMAL);
@@ -231,22 +252,24 @@ class CommandSpeed extends Command
         }
 
         // calculate timing - taken from httpstat
-        $stats['range_dns']      = $stats['time_namelookup'];
-        $stats['range_connect']  = $stats['time_connect']       - $stats['time_namelookup'];
-        $stats['range_ssl']      = $stats['time_pretransfer']   - $stats['time_connect'];
-        $stats['range_server']   = $stats['time_starttransfer'] - $stats['time_pretransfer'];
-        $stats['range_transfer'] = $stats['time_total']         - $stats['time_starttransfer'];
+        $stats['range_dns'] = $stats['time_namelookup'];
+        $stats['range_connect'] = $stats['time_connect'] - $stats['time_namelookup'];
+        $stats['range_ssl'] = $stats['time_pretransfer'] - $stats['time_connect'];
+        $stats['range_server'] = $stats['time_starttransfer'] - $stats['time_pretransfer'];
+        $stats['range_transfer'] = $stats['time_total'] - $stats['time_starttransfer'];
 
         return true;
     }
 
     /**
      * Build command
-     * @param  string $url
-     * @param  string $arguments arguments to pass to curl
+     *
+     * @param string $url
+     * @param string $arguments arguments to pass to curl
+     *
      * @return string command
      */
-    private static function buildCommand(string $url, string $arguments): string
+    private static function buildCommand(string $url, string $arguments) : string
     {
         $command = 'curl';
 
@@ -260,7 +283,7 @@ class CommandSpeed extends Command
             '--show-error',
             [
                 '--output',
-                tempnam(sys_get_temp_dir(), 'hstat')
+                tempnam(sys_get_temp_dir(), 'hstat'),
             ],
             /*[
                 '--dump-header',
@@ -273,10 +296,11 @@ class CommandSpeed extends Command
         ];
 
         // get quote character based on os
-        if (self::isWindows())
+        if (self::isWindows()) {
             $quoteChar = '"';
-        else
+        } else {
             $quoteChar = '\'';
+        }
 
         $spaceChar = ' ';
 
@@ -302,14 +326,15 @@ class CommandSpeed extends Command
         $command .= $spaceChar . $arguments;
 
         // add url
-        return $command .' -- '. $url;
+        return $command . ' -- ' . $url;
     }
 
     /**
      * Build curl write-out argument
+     *
      * @return string
      */
-    private static function buildWriteoutArgument(): string
+    private static function buildWriteoutArgument() : string
     {
         $params = [
             'time_namelookup',
@@ -320,48 +345,54 @@ class CommandSpeed extends Command
             'time_starttransfer',
             'time_total',
             'speed_download',
-//            'speed_upload',
+            //            'speed_upload',
         ];
 
         // get quote character based on os
-        if (self::isWindows())
+        if (self::isWindows()) {
             $quote = '\"';
-        else
+        } else {
             $quote = '"';
+        }
 
         $curl_params = '';
 
         foreach ($params as $i => $param) {
             $curl_params .= $i ? ',' : '';
-            $curl_params .= $quote . $param . $quote .": %{{$param}}";
+            $curl_params .= $quote . $param . $quote . ": %{{$param}}";
         }
 
-        return '{'. $curl_params .'}';
+        return '{' . $curl_params . '}';
     }
 
     /**
      * Check if command is installed
-     * @param  string $cmd
+     *
+     * @param string $cmd
+     *
      * @return bool true if installed, otherwise false
      */
-    private static function commandExists(string $cmd): bool
+    private static function commandExists(string $cmd) : bool
     {
-        $return = shell_exec(sprintf("which %s", escapeshellarg($cmd)));
+        $return = shell_exec(sprintf('which %s', escapeshellarg($cmd)));
         return !empty($return);
     }
 
     /**
      * Check if operating system is Windows
+     *
      * @return bool
      */
-    private static function isWindows(): bool
+    private static function isWindows() : bool
     {
         return strcasecmp(PHP_OS, 'WINNT') == 0;
     }
 
     /**
      * Calculate average for each array column
-     * @param  array $cells
+     *
+     * @param array $cells
+     *
      * @return array with averages
      */
     private static function average(array $cells)
@@ -391,8 +422,9 @@ class CommandSpeed extends Command
 
         foreach ($avg as $key => &$value) {
             // ignore iteration column
-            if ($key == 0)
+            if ($key == 0) {
                 continue;
+            }
 
             // get column average
             $avg[$key] = round($value / $count, 0);
@@ -403,7 +435,9 @@ class CommandSpeed extends Command
 
     /**
      * Calculate median for each array column
-     * @param  array $cells
+     *
+     * @param array $cells
+     *
      * @return array with averages
      */
     private static function median(array $cells)
@@ -434,10 +468,11 @@ class CommandSpeed extends Command
 
             $index = floor($count / 2);
 
-            if ($count % 2)
+            if ($count % 2) {
                 $med[$i] = $column[$index];
-            else
-                $med[$i] = round(($column[$index -1] + $column[$index]) / 2, 0);
+            } else {
+                $med[$i] = round(($column[$index - 1] + $column[$index]) / 2, 0);
+            }
 
             unset($column);
         }
@@ -447,7 +482,9 @@ class CommandSpeed extends Command
 
     /**
      * Calculate max for each array column
-     * @param  array $cells
+     *
+     * @param array $cells
+     *
      * @return array with maxes
      */
     private static function max(array $cells)
@@ -469,8 +506,9 @@ class CommandSpeed extends Command
                 }
 
                 // update value only if greater
-                if ($value > $max[$key_column])
-                     $max[$key_column] = $value;
+                if ($value > $max[$key_column]) {
+                    $max[$key_column] = $value;
+                }
             }
         }
 
@@ -479,7 +517,9 @@ class CommandSpeed extends Command
 
     /**
      * Calculate min for each array column
-     * @param  array $cells
+     *
+     * @param array $cells
+     *
      * @return array with mins
      */
     private static function min(array $cells)
@@ -501,8 +541,9 @@ class CommandSpeed extends Command
                 }
 
                 // update value only if smaller
-                if ($value < $min[$key_column])
-                     $min[$key_column] = $value;
+                if ($value < $min[$key_column]) {
+                    $min[$key_column] = $value;
+                }
             }
         }
 
