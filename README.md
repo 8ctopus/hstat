@@ -1,5 +1,8 @@
 # hstat
 
+[![license](https://poser.pugx.org/8ctopus/hstat/license)](https://packagist.org/packages/8ctopus/hstat)
+![lines of code](https://raw.githubusercontent.com/8ctopus/hstat/image-data/lines.svg)
+
 hstat is a command line tool to test the performance of webpages.
 
 It was inspired from the works of @talhasch [php-httpstat](https://github.com/talhasch/php-httpstat) and @reorx [httpstat](https://github.com/reorx/httpstat) and adds a few improvements:

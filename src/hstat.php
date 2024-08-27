@@ -5,12 +5,9 @@ declare(strict_types=1);
 use Oct8pus\hstat\CommandSpeed;
 use Symfony\Component\Console\Application;
 
-// program entry point
-if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    require __DIR__ . '/../vendor/autoload.php';
-} else {
-    require __DIR__ . '/vendor/autoload.php';
-}
+$file = '/vendor/autoload.php';
+
+require file_exists(__DIR__ . $file) ? __DIR__ . $file : dirname(__DIR__) . $file;
 
 $app = new Application('hstat', '1.0.2');
 $app->add(new CommandSpeed());
