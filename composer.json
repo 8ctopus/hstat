@@ -1,6 +1,9 @@
 {
     "name": "8ctopus/hstat",
-    "description": "test web page speed command line tool",
+    "type": "application",
+    "description": "test webpage speed command line tool",
+    "keywords": ["webpage speed", "performance"],
+    "homepage": "https://github.com/8ctopus/hstat",
     "license": "MIT",
     "authors": [
         {
@@ -9,15 +12,28 @@
         }
     ],
     "require": {
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.8",
+        "phpstan/phpstan": "^1.9",
+        "phpmd/phpmd": "^2.13",
         "symfony/console": "^7",
         "symfony/finder": "^7"
     },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Oct8pus\\hstat\\": "src/"
+            "Oct8pus\\hstat\\": "src"
         }
     },
+    "scripts": {
+        "fix": "php-cs-fixer fix --verbose",
+        "fix-risky": "php-cs-fixer fix --allow-risky=yes --verbose",
+        "phpstan": "phpstan analyse --level 9 src",
+        "phpmd": "phpmd src ansi phpmd.xml"
+    },
     "bin": [
-        "hstat"
+        "hstat.phar"
     ]
 }
