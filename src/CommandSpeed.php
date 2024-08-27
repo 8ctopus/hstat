@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oct8pus\hstat;
+namespace Oct8pus\HStat;
 
 use Exception;
 use Symfony\Component\Console\Command\Command;

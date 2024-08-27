@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Oct8pus\\hstat\\": "src"
+            "Oct8pus\\HStat\\": "src"
         }
     },
     "scripts": {
