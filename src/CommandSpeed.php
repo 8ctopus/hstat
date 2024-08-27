@@ -74,11 +74,7 @@ class CommandSpeed extends Command
 
         // get pause option
         $pause = $input->getOption('pause');
-
-        // convert pause to int
-        if ($pause !== false) {
-            $pause = (int) $pause;
-        }
+        $pause = is_numeric($pause) ? (int) $pause : false;
 
         // get arguments to pass to curl
         $arguments = $input->getOption('arguments');
@@ -198,7 +194,7 @@ class CommandSpeed extends Command
      * Measure speed
      *
      * @param string $command
-     * @param [out] array $stats
+     * @param array<string, string> $stats
      *
      * @return bool true on success, otherwise false
      */
@@ -307,6 +303,8 @@ class CommandSpeed extends Command
         // convert array arguments to string
         foreach ($args as $key => &$values) {
             if (is_array($values)) {
+                $output = '';
+
                 foreach ($values as $keyColumn => $value) {
                     if ($keyColumn === 0) {
                         $output = $value;
@@ -391,9 +389,9 @@ class CommandSpeed extends Command
     /**
      * Calculate average for each array column
      *
-     * @param array $cells
+     * @param array<int, array<int, mixed>> $cells
      *
-     * @return array with averages
+     * @return array<int, int>
      */
     private static function average(array $cells) : array
     {
@@ -436,9 +434,9 @@ class CommandSpeed extends Command
     /**
      * Calculate median for each array column
      *
-     * @param array $cells
+     * @param array<int, array<int, mixed>> $cells
      *
-     * @return array with averages
+     * @return array<int, int>
      */
     private static function median(array $cells) : array
     {
@@ -483,9 +481,9 @@ class CommandSpeed extends Command
     /**
      * Calculate max for each array column
      *
-     * @param array $cells
+     * @param array<int, array<int, mixed>> $cells
      *
-     * @return array with maxes
+     * @return array<int, int>
      */
     private static function max(array $cells) : array
     {
@@ -518,9 +516,9 @@ class CommandSpeed extends Command
     /**
      * Calculate min for each array column
      *
-     * @param array $cells
+     * @param array<int, array<int, mixed>> $cells
      *
-     * @return array with mins
+     * @return array<int, int>
      */
     private static function min(array $cells) : array
     {
