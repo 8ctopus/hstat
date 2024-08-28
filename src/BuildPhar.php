@@ -34,8 +34,10 @@ $finder = new Finder();
 $finder->files()
     ->ignoreVCS(true)
     ->name('*.php')
-    ->notName('Compiler.php')
+    ->notName('BuildPhar.php')
     ->in(__DIR__);
+
+echo "Add source files - " . count($finder) . "\n";
 
 foreach ($finder as $file) {
     $phar->addFile($file->getRealPath(), getRelativeFilePath($file));
@@ -52,6 +54,8 @@ $finder->files()
     ->exclude('docs')
     ->in(__DIR__ . '/../vendor/');
 
+echo "Add vendor dependencies - " . count($finder) . "\n";
+
 foreach ($finder as $file) {
     $phar->addFile($file->getRealPath(), getRelativeFilePath($file));
 }
@@ -60,22 +64,22 @@ foreach ($finder as $file) {
 $file = 'src/EntryPoint.php';
 
 // create default "boot" loader
-$boot_loader = $phar->createDefaultStub($file);
+$bootLoader = $phar->createDefaultStub($file);
 
 // add shebang to bootloader
 $stub = "#!/usr/bin/env php\n";
 
-$boot_loader = $stub . $boot_loader;
+$bootLoader = $stub . $bootLoader;
 
 // set bootloader
-$phar->setStub($boot_loader);
+$phar->setStub($bootLoader);
 
 $phar->stopBuffering();
 
 // compress to gzip
 //$phar->compress(Phar::GZ);
 
-echo 'Create phar - OK';
+echo "Create phar - OK\n";
 
 /**
  * Get file relative path

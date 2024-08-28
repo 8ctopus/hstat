@@ -12,13 +12,13 @@
         }
     ],
     "require": {
+        "symfony/console": "^7",
+        "symfony/finder": "^7"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.8",
         "phpstan/phpstan": "^1.9",
-        "phpmd/phpmd": "^2.13",
-        "symfony/console": "^7",
-        "symfony/finder": "^7"
+        "phpmd/phpmd": "^2.13"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
