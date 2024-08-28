@@ -11,7 +11,13 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
 - iterations with pause in between
 - data set analysis: average, median, max and min.
 
-# how to install
+## how to install
+
+You have the choice between:
+
+- composer install `composer require 8ctopus/webp8`
+- download the phar
+- or build it yourself
 
 ```sh
 curl -LO https://github.com/8ctopus/hstat/releases/download/1.1.0/hstat.phar
@@ -29,9 +35,9 @@ mv hstat.phar hstat
 mv hstat /usr/local/bin/
 ```
 
-# how to use
+## how to use
 
-## basic
+### basic
 
 ```txt
 $ ./hstat speed https://octopuslabs.io/
@@ -43,7 +49,7 @@ $ ./hstat speed https://octopuslabs.io/
  --- ----------------- --------------------- -------------------- ------------------------ ----------------------- ------------
 ```
 
-## advanced
+### advanced
 
 measure website speed 10 iterations, 3 seconds pause in between, show median, average, min and max
 
@@ -70,7 +76,7 @@ $ ./hstat speed --iterations 10 --pause 3000 --median --average --min --max http
  ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
 ```
 
-### definitions
+#### definitions
 
 - DNS lookup : time to lookup the server's IP address
 - TCP connection : time to establish the connection with the server
@@ -78,47 +84,17 @@ $ ./hstat speed --iterations 10 --pause 3000 --median --average --min --max http
 - server processing : time the server took to process the request (apache/nginx + php)
 - content transfer : time to transfer the page to you
 
-### Xdebug cookie example
+#### Xdebug cookie example
 
 ```bash
 ./hstat speed --iterations 10 --median --average --min --max --arguments="--cookie \"XDEBUG_SESSION=mysession\"" https://octopuslabs.io/
-```
-
-### hstat documentation
-
-```bash
-Description:
-  Measure web page speed
-
-Usage:
-  speed [options] [--] <url>
-
-Arguments:
-  url
-
-Options:
-  -i, --iterations=ITERATIONS  number of iterations
-  -p, --pause=PAUSE            pause in ms between iterations
-  -a, --average                show average
-  -m, --median                 show median
-      --min                    show min
-      --max                    show max
-  -r, --arguments=ARGUMENTS    arguments to pass to curl [default: ""]
-      --hide-iterations        hide iterations
-  -h, --help                   Display this help message
-  -q, --quiet                  Do not output any message
-  -V, --version                Display this application version
-      --ansi                   Force ANSI output
-      --no-ansi                Disable ANSI output
-  -n, --no-interaction         Do not ask any interactive question
-  -v|vv|vvv, --verbose         Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 ```
 
 ## build phar
 
     ./build.sh
 
-# improvement ideas
+## improvement ideas
 
 - add headers option
 - add specific header option
