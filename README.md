@@ -20,7 +20,7 @@ You have the choice between:
 - or build it yourself
 
 ```sh
-curl -LO https://github.com/8ctopus/hstat/releases/download/1.1.0/hstat.phar
+curl -LO https://github.com/8ctopus/hstat/releases/download/1.1.1/hstat.phar
 
 # check hash against the one published under releases
 sha256sum hstat.phar

@@ -10,6 +10,6 @@ $file = '/vendor/autoload.php';
 
 require file_exists(__DIR__ . $file) ? __DIR__ . $file : dirname(__DIR__) . $file;
 
-$app = new Application('hstat', '1.1.0');
+$app = new Application('hstat', '1.1.1');
 $app->add(new CommandSpeed());
 $app->run();
