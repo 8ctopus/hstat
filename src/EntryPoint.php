@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oct8pus\HStat;
 
-use Oct8pus\HStat\CommandSpeed;
 use Symfony\Component\Console\Application;
 
 $file = '/vendor/autoload.php';
