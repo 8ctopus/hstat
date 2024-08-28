@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Compile hstat into phar
+ * Compile into phar
  *
- * @note php.ini setting phar.readonly must be set to false
+ * php.ini setting phar.readonly must be set to false
  * parts taken from composer compiler https://github.com/composer/composer/blob/master/src/Composer/Compiler.php
  */
 
