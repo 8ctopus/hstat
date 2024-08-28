@@ -2,7 +2,7 @@
     "name": "8ctopus/hstat",
     "type": "application",
     "description": "test webpage speed command line tool",
-    "keywords": ["webpage speed", "performance"],
+    "keywords": ["speed", "performance", "webpage"],
     "homepage": "https://github.com/8ctopus/hstat",
     "license": "MIT",
     "authors": [
@@ -37,6 +37,6 @@
         "phpmd": "phpmd src ansi phpmd.xml"
     },
     "bin": [
-        "hstat.phar"
+        "bin/hstat.phar"
     ]
 }

@@ -114,11 +114,9 @@ Options:
   -v|vv|vvv, --verbose         Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 ```
 
-# how to build phar
+## build phar
 
-```sh
-php src/Compiler.php
-```
+    ./build.sh
 
 # improvement ideas
 
