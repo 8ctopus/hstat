@@ -15,7 +15,7 @@ It was inspired from the works of @talhasch [php-httpstat](https://github.com/ta
 
 You have the choice between:
 
-- composer install `composer require 8ctopus/webp8`
+- composer install `composer require 8ctopus/hstat`
 - download the phar
 - or build it yourself
 
@@ -40,7 +40,7 @@ mv hstat /usr/local/bin/
 ### basic
 
 ```txt
-$ ./hstat speed https://octopuslabs.io/
+$ hstat speed https://octopuslabs.io/
 
  --- ----------------- --------------------- -------------------- ------------------------ ----------------------- ------------
   /   DNS lookup (ms)   TCP connection (ms)   TLS handshake (ms)   server processing (ms)   content transfer (ms)   total (ms)
@@ -54,7 +54,7 @@ $ ./hstat speed https://octopuslabs.io/
 measure website speed 10 iterations, 3 seconds pause in between, show median, average, min and max
 
 ```txt
-$ ./hstat speed --iterations 10 --pause 3000 --median --average --min --max https://octopuslabs.io/
+$ hstat speed --iterations 10 --pause 3000 --median --average --min --max https://octopuslabs.io/
  ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
   /     DNS lookup (ms)   TCP connection (ms)   TLS handshake (ms)   server processing (ms)   content transfer (ms)
  ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
@@ -87,12 +87,14 @@ $ ./hstat speed --iterations 10 --pause 3000 --median --average --min --max http
 #### Xdebug cookie example
 
 ```bash
-./hstat speed --iterations 10 --median --average --min --max --arguments="--cookie \"XDEBUG_SESSION=mysession\"" https://octopuslabs.io/
+hstat speed --iterations 10 --median --average --min --max --arguments="--cookie \"XDEBUG_SESSION=mysession\"" https://octopuslabs.io/
 ```
 
 ## build phar
 
-    ./build.sh
+```bash
+./build.sh
+```
 
 ## improvement ideas
 
