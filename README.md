@@ -76,6 +76,8 @@ $ hstat speed --iterations 10 --pause 3000 --median --average --min --max https:
  ----- ----------------- --------------------- -------------------- ------------------------ -----------------------
 ```
 
+__NOTE__: when testing a website with a self-signed SSL certificate, add the argument `--arguments="--insecure"`
+
 #### definitions
 
 - DNS lookup : time to lookup the server's IP address
